@@ -6,11 +6,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Menu, X } from "lucide-react";
 
-interface HomeNavbarProps {
-  onOpenDemo?: () => void;
-}
 
-export const HomeNavbar: React.FC<HomeNavbarProps> = ({ onOpenDemo }) => {
+
+export const HomeNavbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (

@@ -71,7 +71,7 @@ export const Testimonials = () => {
               </div>
 
               <p className="text-slate-300 leading-relaxed flex-1">
-                "{testimonial.quote}"
+                &ldquo;{testimonial.quote}&rdquo;
               </p>
 
               <div className="mt-8 pt-6 border-t border-[#292933] flex items-center gap-4">

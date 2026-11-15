@@ -45,7 +45,7 @@ export const FaqSection = () => {
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Got Questions? We've Got Answers.
+            Got Questions? We&apos;ve Got Answers.
           </h2>
 
           <p className="mt-4 text-lg text-slate-400">

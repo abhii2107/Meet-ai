@@ -76,22 +76,22 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           envs: AWS_REGION,ECR_REPOSITORY
           script: |
-            # 1. Authenticate EC2 Docker to ECR
+            # 1. Authenticate with AWS ECR
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | \
-              docker login --username AWS --password-stdin \
-              ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+             sudo docker login --username AWS --password-stdin \
+             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
-            # 2. Pull the latest pre-built image from ECR
+            # 2. Pull latest image
             export ECR_IMAGE="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest"
-            docker pull $ECR_IMAGE
+            sudo docker pull $ECR_IMAGE
 
-            # 3. Stop and remove old containers
-            cd ~/Final_Year_Project
+            # 3. Update project
+            cd ~/Meet-ai
             git pull origin main
-            docker compose -f docker-compose.prod.yml down
+            sudo docker compose -f docker-compose.prod.yml down
 
-            # 4. Start the new containers using the ECR image
-            ECR_IMAGE=$ECR_IMAGE docker compose -f docker-compose.prod.yml up -d
+            # 4. Start application
+            sudo ECR_IMAGE=$ECR_IMAGE docker compose -f docker-compose.prod.yml up -d
 
-            # 5. Clean up old dangling images to preserve disk space
-            docker image prune -f
+            # 5. Clean old images
+            sudo docker image prune -f
