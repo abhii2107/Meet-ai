@@ -21,7 +21,7 @@ export const HomeView = () => {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white font-sans selection:bg-[#FF2D95] selection:text-white overflow-x-hidden">
-      <HomeNavbar onOpenDemo={() => setIsDemoOpen(true)} />
+      <HomeNavbar />
 
       <HeroSection />
 
