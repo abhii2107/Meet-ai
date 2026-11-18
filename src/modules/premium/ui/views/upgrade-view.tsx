@@ -6,6 +6,7 @@ import {useTRPC} from "@/trpc/client";
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
 import { PricingCard } from "../components/pricing-card";
+import { toast } from "sonner";
 
 export const UpgradeView = () => {
     const trpc = useTRPC();
@@ -18,31 +19,66 @@ export const UpgradeView = () => {
         trpc.premium.getCurrentSubscription.queryOptions()
     );
 
+    const redirectToCheckout = async (productId: string) => {
+        try {
+            const result = await authClient.checkout({
+                products: [productId],
+            });
+
+            if (result?.url) {
+                window.location.assign(result.url);
+            }
+        } catch {
+            toast.error("Unable to open the checkout page. Please try again.");
+        }
+    };
+
+    const openPortal = async () => {
+        try {
+            const result = await authClient.customer.portal();
+            if (result?.url) {
+                window.location.assign(result.url);
+            }
+        } catch {
+            toast.error("Unable to open subscription management.");
+        }
+    };
+
     return (
-        <div className="flex-1 py-4 px-4 md:px-8 flex flex-col gap-y-10">
-            <div className="mt-4 flex-1 flex flex-col gap-y-10 items-center">
-                <h5 className="font-medium text-2xl md:text-3xl">
-                    You are on the{" "}
-                    <span className="font-semibold text-primary">
-                        {currentSubscription?.name ?? "Free"}
-                    </span>{" "}
-                    plan
-                </h5>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="flex-1 min-h-[calc(100vh-64px)] bg-[#090E1A] px-4 py-10 md:px-8 text-white">
+            <div className="mx-auto flex max-w-6xl flex-col items-center">
+                <div className="mb-10 text-center">
+                    <h5 className="text-3xl font-bold md:text-4xl">
+                        You are on the{" "}
+                        <span className="text-[#24D9A2]">
+                            {currentSubscription?.name ?? "Free"}
+                        </span>{" "}
+                        plan
+                    </h5>
+                    <p className="mt-3 max-w-2xl text-sm text-slate-400 md:text-base">
+                        Upgrade your workspace to unlock unlimited meetings, real-time AI copilot Q&A, and advanced team seats.
+                    </p>
+                </div>
+                {products.length === 0 ? (
+                    <div className="rounded-lg border border-slate-700 bg-slate-900 px-6 py-8 text-center text-slate-300">
+                        No plans are available right now.
+                    </div>
+                ) : (
+                <div className="grid w-full grid-cols-1 items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3">
                     {products.map((product, index) => {
                         const isCurrentProduct = currentSubscription?.id === product.id;
                         const isPremium = !!currentSubscription;
                         const isHighlighted = product.metadata?.variant === "highlighted" || (products.length > 1 && index === Math.floor(products.length / 2));
 
                         let buttonText = "Upgrade";
-                        let onClick = () => authClient.checkout({ products: [product.id] });
+                        let onClick = () => redirectToCheckout(product.id);
 
                         if(isCurrentProduct){
                             buttonText = "Manage";
-                            onClick = () => authClient.portal();
+                            onClick = openPortal;
                         } else if (isPremium) {
                             buttonText = "Change Plan";
-                            onClick = () => authClient.portal();
+                            onClick = openPortal;
                         }
 
                         return (
@@ -73,6 +109,7 @@ export const UpgradeView = () => {
                         )
                     })}
                 </div>
+                )}
             </div>
         </div>
     );

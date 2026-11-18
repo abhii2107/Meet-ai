@@ -149,8 +149,5 @@ Meet-AI utilizes custom TRPC middleware (`premiumProcedure`) linked to **Polar.s
 * **Free Tier**: Limited to a maximum number of free meetings (`MAX_FREE_MEETINGS`).
 * **Premium Tier**: Unlimited meetings, advanced summaries, and immediate processing. Active subscription checking is handled entirely in memory and cached dynamically.
 
----
 
-## 📧 Contact & Support
-* **Email**: mir.saif.ali2004@gmail.com
-* **Project**: [Meet-AI GitHub](https://github.com/mir.saif.ali2004/Meet-AI)
+

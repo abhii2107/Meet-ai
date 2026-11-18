@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { CircleCheckIcon } from "lucide-react";
 
 const pricingCardVariants = cva(
-  "rounded-lg p-4 py-6 w-full",
+  "h-full rounded-xl p-5 py-7 w-full",
   {
     variants: {
       variant: {
